@@ -4,9 +4,8 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <img src="~@/assets/images/account-logo.png" alt="" />
+          <h1 class="text-4xl font-bold my-4">交通设备管理平台</h1>
         </div>
-        <div class="view-account-top-desc">Naive Ui Admin中台前端/设计解决方案</div>
       </div>
       <div class="view-account-form">
         <n-form
