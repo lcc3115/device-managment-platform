@@ -9,6 +9,8 @@ import { configHtmlPlugin } from './html';
 import { configMockPlugin } from './mock';
 import { configCompressPlugin } from './compress';
 
+import WindiCSS from 'vite-plugin-windicss';
+
 export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean, prodMock) {
   const { VITE_USE_MOCK, VITE_BUILD_COMPRESS, VITE_BUILD_COMPRESS_DELETE_ORIGIN_FILE } = viteEnv;
 
@@ -23,6 +25,9 @@ export function createVitePlugins(viteEnv: ViteEnv, isBuild: boolean, prodMock) 
       dts: true,
       resolvers: [NaiveUiResolver()],
     }),
+
+    // windicss
+    WindiCSS(),
   ];
 
   // vite-plugin-html

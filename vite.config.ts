@@ -7,6 +7,7 @@ import { OUTPUT_DIR } from './build/constant';
 import { createProxy } from './build/vite/proxy';
 import pkg from './package.json';
 import { format } from 'date-fns';
+
 const { dependencies, devDependencies, name, version } = pkg;
 
 const __APP_INFO__ = {

@@ -5,6 +5,7 @@ import router, { setupRouter } from './router';
 import { setupStore } from '@/store';
 import { setupNaive, setupDirectives } from '@/plugins';
 import { AppProvider } from '@/components/Application';
+import 'virtual:windi.css';
 
 async function bootstrap() {
   const appProvider = createApp(AppProvider);
