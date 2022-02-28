@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import { Layout } from '@/router/constant';
-import { OptionsSharp } from '@vicons/ionicons5';
+import { TrafficLights } from '@vicons/tabler';
 import { renderIcon } from '@/utils/index';
 
 /**
@@ -16,31 +16,23 @@ import { renderIcon } from '@/utils/index';
  * */
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/system',
-    name: 'System',
-    redirect: '/system/menu',
+    path: '/device',
+    name: 'Device',
+    redirect: '/device/list',
     component: Layout,
     meta: {
-      title: '系统设置',
-      icon: renderIcon(OptionsSharp),
-      sort: 1,
+      title: '设备',
+      icon: renderIcon(TrafficLights),
+      sort: 4,
     },
     children: [
       {
-        path: 'menu',
-        name: 'system_menu',
+        path: 'list',
+        name: 'device_list',
         meta: {
-          title: '菜单权限管理',
+          title: '设备列表',
         },
-        component: () => import('@/views/system/menu/menu.vue'),
-      },
-      {
-        path: 'role',
-        name: 'system_role',
-        meta: {
-          title: '角色权限管理',
-        },
-        component: () => import('@/views/system/role/role.vue'),
+        component: () => import('@/views/device/index.vue'),
       },
     ],
   },

@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import { Layout } from '@/router/constant';
-import { ExclamationCircleOutlined } from '@vicons/antd';
+import { Crossroads } from '@vicons/carbon';
 import { renderIcon } from '@/utils/index';
 
 /**
@@ -16,39 +16,23 @@ import { renderIcon } from '@/utils/index';
  * */
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/exception',
-    name: 'Exception',
-    redirect: '/exception/403',
+    path: '/crossroad',
+    name: 'Crossroad',
+    redirect: '/crossroad/list',
     component: Layout,
     meta: {
-      title: '异常页面',
-      icon: renderIcon(ExclamationCircleOutlined),
+      title: '路口',
+      icon: renderIcon(Crossroads),
       sort: 3,
     },
     children: [
       {
-        path: '403',
-        name: 'exception-403',
+        path: 'list',
+        name: 'crossroad_list',
         meta: {
-          title: '403',
+          title: '路口列表',
         },
-        component: () => import('@/views/exception/403.vue'),
-      },
-      {
-        path: '404',
-        name: 'exception-404',
-        meta: {
-          title: '404',
-        },
-        component: () => import('@/views/exception/404.vue'),
-      },
-      {
-        path: '500',
-        name: 'exception-500',
-        meta: {
-          title: '500',
-        },
-        component: () => import('@/views/exception/500.vue'),
+        component: () => import('@/views/crossroad/index.vue'),
       },
     ],
   },

@@ -24,6 +24,7 @@ const routes: Array<RouteRecordRaw> = [
       title: '设置页面',
       icon: renderIcon(SettingOutlined),
       sort: 5,
+      hidden: true,
     },
     children: [
       {

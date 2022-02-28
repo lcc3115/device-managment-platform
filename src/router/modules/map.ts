@@ -1,6 +1,6 @@
 import { RouteRecordRaw } from 'vue-router';
 import { Layout } from '@/router/constant';
-import { TableOutlined } from '@vicons/antd';
+import { MapSharp } from '@vicons/ionicons5';
 import { renderIcon } from '@/utils/index';
 
 /**
@@ -16,33 +16,23 @@ import { renderIcon } from '@/utils/index';
  * */
 const routes: Array<RouteRecordRaw> = [
   {
-    path: '/list',
-    name: 'List',
-    redirect: '/list/basic-list',
+    path: '/map',
+    name: 'Map',
+    redirect: '/system/index',
     component: Layout,
     meta: {
-      title: '列表页面',
-      icon: renderIcon(TableOutlined),
+      title: '地图',
+      icon: renderIcon(MapSharp),
       sort: 2,
     },
     children: [
       {
-        path: 'basic-list',
-        name: 'basic-list',
+        path: 'index',
+        name: 'map_index',
         meta: {
-          title: '基础列表',
+          title: '交管地图',
         },
-        component: () => import('@/views/list/basicList/index.vue'),
-      },
-      {
-        path: 'basic-info/:id?',
-        name: 'basic-info',
-        meta: {
-          title: '基础详情',
-          hidden: true,
-          activeMenu: 'basic-list',
-        },
-        component: () => import('@/views/list/basicList/info.vue'),
+        component: () => import('@/views/map/index.vue'),
       },
     ],
   },

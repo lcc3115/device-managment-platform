@@ -1,7 +1,6 @@
 <template>
   <div class="logo">
-    <img src="~@/assets/images/logo.png" alt="" :class="{ 'mr-2': !collapsed }" />
-    <h2 v-show="!collapsed" class="title">NaiveUiAdmin</h2>
+    <h2 v-show="!collapsed" class="text-lg">交通设备管理平台</h2>
   </div>
 </template>
 
