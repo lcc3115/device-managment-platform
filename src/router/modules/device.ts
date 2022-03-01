@@ -34,6 +34,14 @@ const routes: Array<RouteRecordRaw> = [
         },
         component: () => import('@/views/device/index.vue'),
       },
+      {
+        path: 'info',
+        name: 'device_info',
+        meta: {
+          title: '设备详情',
+        },
+        component: () => import('@/views/device/DeviceInfo.vue'),
+      },
     ],
   },
 ];
