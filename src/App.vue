@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, onMounted, onUnmounted } from 'vue';
+  import { computed, onMounted, onUnmounted, watchEffect } from 'vue';
   import { zhCN, dateZhCN, createTheme, inputDark, datePickerDark, darkTheme } from 'naive-ui';
   import { LockScreen } from '@/components/Lockscreen';
   import { AppProvider } from '@/components/Application';
@@ -25,12 +25,25 @@
   import { useRoute } from 'vue-router';
   import { useDesignSettingStore } from '@/store/modules/designSetting';
   import { lighten } from '@/utils/index';
+  import { useWindowSize } from '@vueuse/core';
+  import { useProjectSettingStore } from './store/modules/projectSetting';
 
   const route = useRoute();
   const useLockscreen = useLockscreenStore();
   const designStore = useDesignSettingStore();
   const isLock = computed(() => useLockscreen.isLock);
   const lockTime = computed(() => useLockscreen.lockTime);
+  const projectStore = useProjectSettingStore();
+
+  // nav toggle when vw less than 1080;
+  const { width } = useWindowSize();
+  watchEffect(() => {
+    if (width.value <= 1080) {
+      projectStore.navMode = 'horizontal';
+    } else {
+      projectStore.navMode = 'vertical';
+    }
+  });
 
   /**
    * @type import('naive-ui').GlobalThemeOverrides
