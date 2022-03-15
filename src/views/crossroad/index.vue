@@ -82,8 +82,8 @@
       title: '操作',
       key: 'edit',
       align: 'center',
-      render() {
-        return h(TableAction);
+      render(data) {
+        return h(TableAction, { id: data.crossing_id });
       },
     },
   ];

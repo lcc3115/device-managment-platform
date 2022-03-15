@@ -9,7 +9,7 @@
       @close="handleClose"
       @add="handleAdd"
     >
-      <n-tab-pane v-for="(road, roadIndex) in roads" :key="roadIndex" :name="road.direction">
+      <n-tab-pane v-for="(road, roadIndex) in roads" :key="roadIndex" :name="roadIndex">
         <n-form class="px-2" label-placement="left" :model="road">
           <n-grid :cols="2" x-gap="8">
             <n-form-item-gi :span="2" label="方向名" path="direction">
@@ -88,19 +88,19 @@
     },
     setup(props) {
       const { roadList } = toRefs(props);
-      const valueRef = ref(roadList.value[0].direction);
-      const roadsRef = ref(roadList);
+      const roads = ref(roadList);
+      const valueRef = ref(0);
       const addableRef = computed(() => {
         return {
-          disabled: roadsRef.value.length >= 10,
+          disabled: roads.value.length >= 10,
         };
       });
       const closableRef = computed(() => {
-        return roadsRef.value.length > 1;
+        return roads.value.length > 1;
       });
       return {
         value: valueRef,
-        roads: roadsRef,
+        roads,
         addable: addableRef,
         closable: closableRef,
         handleAdd() {},

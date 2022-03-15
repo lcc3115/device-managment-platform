@@ -3,7 +3,7 @@
     <n-tooltip trigger="hover">
       编辑路口
       <template #trigger>
-        <n-button circle type="info">
+        <n-button circle type="info" @click="toInfoPage">
           <n-icon>
             <Edit />
           </n-icon>
@@ -32,11 +32,28 @@
 <script lang="ts">
   import { Edit, Delete } from '@vicons/carbon';
   import { defineComponent } from 'vue';
+  import { useRouter } from 'vue-router';
   export default defineComponent({
     name: 'TableACtion',
     components: {
       Edit,
       Delete,
+    },
+    props: {
+      id: {
+        type: [Number, String],
+        required: true,
+      },
+    },
+    setup(props) {
+      const router = useRouter();
+      function toInfoPage() {
+        router.push({ name: `crossroad_info`, params: { id: props.id } });
+      }
+
+      return {
+        toInfoPage,
+      };
     },
   });
 </script>

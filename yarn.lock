@@ -3289,6 +3289,13 @@ fast-levenshtein@^2.0.6, fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-xml-parser@^4.0.6:
+  version "4.0.6"
+  resolved "https://registry.npmmirror.com/fast-xml-parser/-/fast-xml-parser-4.0.6.tgz#bd0b75badc7abfc55c772f6a0c21e417ad989743"
+  integrity sha512-RHz47iX/DKT6BQwYQUmKG/1fuC5g2s/TibpxNvE+0ysnpSJxePFzsJvRDtfGhLRg3zdKMzO6EJn8n7+AJ6pSHg==
+  dependencies:
+    strnum "^1.0.5"
+
 fastest-levenshtein@^1.0.12:
   version "1.0.12"
   resolved "https://registry.yarnpkg.com/fastest-levenshtein/-/fastest-levenshtein-1.0.12.tgz#9990f7d3a88cc5a9ffd1f1745745251700d497e2"
@@ -5021,10 +5028,10 @@ map-obj@^4.0.0:
   resolved "https://registry.yarnpkg.com/map-obj/-/map-obj-4.3.0.tgz#9304f906e93faae70880da102a9f1df0ea8bb05a"
   integrity sha512-hdN1wVrZbb29eBGiGjJbeP8JbKjq1urkHJ/LIP/NY48MZ1QVXUsQBV1G1zvYFHn1XE06cwjBsOI2K3Ulnj1YXQ==
 
-maptalks@latest:
-  version "1.0.0-beta.10"
-  resolved "https://registry.npmmirror.com/maptalks/-/maptalks-1.0.0-beta.10.tgz#cbc40f5ab7c0e3aa1e4e8b7805dc2e0f9469781a"
-  integrity sha512-9RogA1cHUgNiuia4puLdydFsy3mTPeFx9MG9QmaWGsXMxXa/uOYDmDqYO/LNVf6OPdAMSHAoS+egUaxwS65XuA==
+maptalks@^1.0.0-beta.10:
+  version "1.0.0-rc.2"
+  resolved "https://registry.npmmirror.com/maptalks/-/maptalks-1.0.0-rc.2.tgz#dc49faa35bbbd79ec76598f352ab781f369e8440"
+  integrity sha512-r2XJfXQOQp4hzkjIKHbAOE3Xa0yzEL+wha+lyyzB5q7zaKE2SNn7WM/Tgw6mfjWkvZ3FGjoot5UGL9/TmFOwwg==
   dependencies:
     "@maptalks/feature-filter" "^1.0.0"
     "@maptalks/function-type" "^1.2.3"
@@ -6535,6 +6542,11 @@ strip-outer@^1.0.1:
   integrity sha512-k55yxKHwaXnpYGsOzg4Vl8+tDrWylxDEpknGjhTiZB8dFRU5rTo9CAzeycivxV3s+zlTKwrs6WxMxR95n26kwg==
   dependencies:
     escape-string-regexp "^1.0.2"
+
+strnum@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmmirror.com/strnum/-/strnum-1.0.5.tgz#5c4e829fe15ad4ff0d20c3db5ac97b73c9b072db"
+  integrity sha512-J8bbNyKKXl5qYcR36TIO8W3mVGVHrmmxsd5PAItGkmyzwJvybiw2IVq5nqd0i4LSNSkB/sx9VHllbfFdr9k1JA==
 
 style-search@^0.1.0:
   version "0.1.0"
