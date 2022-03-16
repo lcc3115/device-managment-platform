@@ -16,7 +16,6 @@ import { setObjToUrlParams } from '@/utils/urlUtils';
 import { RequestOptions, Result, CreateAxiosOptions } from './types';
 
 import { useUserStoreWidthOut } from '@/store/modules/user';
-import { XMLParser } from 'fast-xml-parser';
 
 const globSetting = useGlobSetting();
 const urlPrefix = globSetting.urlPrefix || '';
@@ -49,25 +48,17 @@ const transform: AxiosTransform = {
     // 不进行任何处理，直接返回
     // 用于页面代码可能需要直接获取code，data，message这些信息时开启
     if (!isTransformResponse) {
-      console.log(233);
       return res.data;
     }
 
-    const { data } = res;
-    console.log(res);
-    if (typeof data === 'string') {
-      const parser = new XMLParser();
-      const dataObj = parser.parse(data).string;
-      if (typeof dataObj === 'string') {
-        const result = JSON.parse(dataObj);
-        const code = 200;
-        const message = 'ok';
-        res.data = {
-          code,
-          result,
-          message,
-        };
-      }
+    let { data } = res;
+    if (!data.code) {
+      const result = data;
+      data = {
+        code: 200,
+        message: 'ok',
+        result,
+      };
     }
 
     const $dialog = window['$dialog'];

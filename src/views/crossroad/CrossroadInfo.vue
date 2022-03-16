@@ -163,7 +163,6 @@
       const subList = ref();
       async function getCrossInfo() {
         const res = await getCrossroadInfo(42010001);
-        console.log(res);
         crossInfo.value = res;
         subList.value = crossInfo.value.subList;
       }
