@@ -9,7 +9,12 @@
       @close="handleClose"
       @add="handleAdd"
     >
-      <n-tab-pane v-for="(road, roadIndex) in roads" :key="roadIndex" :name="roadIndex">
+      <n-tab-pane
+        v-for="(road, roadIndex) in roads"
+        :key="roadIndex"
+        :name="roadIndex"
+        :tab="road.direction"
+      >
         <n-form class="px-2" label-placement="left" :model="road">
           <n-grid :cols="2" x-gap="8">
             <n-form-item-gi :span="2" label="方向名" path="direction">

@@ -3,7 +3,16 @@
     <div class="w-full h-full min-h-600px">
       <n-card v-if="crossInfo">
         <!-- crossroad name -->
-        <template #header> 路口信息</template>
+        <template #header>
+          <div class="flex flex-row items-center justify-between">
+            <h1>路口信息</h1>
+            <div>
+              <n-button type="success" @click="submitInfo" :loading="submitLoading"
+                >提交信息</n-button
+              >
+            </div>
+          </div>
+        </template>
         <!-- crossroad info -->
         <n-tabs type="line">
           <!-- basic info -->
@@ -151,7 +160,8 @@
   import { defineComponent, ref, onMounted } from 'vue';
   import { FormInst } from 'naive-ui';
   import RoadList from './components/RoadList.vue';
-  import { getCrossroadInfo } from '@/api/crossroad';
+  import { getCrossroadInfo, changeCrossroadInfo } from '@/api/crossroad';
+  import { useRoute } from 'vue-router';
 
   export default defineComponent({
     components: {
@@ -161,10 +171,21 @@
       // get cross info
       const crossInfo = ref();
       const subList = ref();
+      const route = useRoute();
       async function getCrossInfo() {
-        const res = await getCrossroadInfo(42010001);
+        const res = await getCrossroadInfo(route.params.id);
         crossInfo.value = res;
         subList.value = crossInfo.value.subList;
+      }
+
+      // submit cross info
+      const submitLoadingRef = ref(false);
+      async function submitInfo() {
+        submitLoadingRef.value = true;
+        const submitData = crossInfo.value;
+        const res = await changeCrossroadInfo(submitData);
+        console.log(res);
+        submitLoadingRef.value = false;
       }
 
       onMounted(() => {
@@ -211,6 +232,8 @@
         roadPavingOpts,
         signalBrandOpts,
         subList,
+        submitInfo,
+        submitLoading: submitLoadingRef,
       };
     },
     methods: {
