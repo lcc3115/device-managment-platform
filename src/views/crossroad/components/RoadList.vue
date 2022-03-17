@@ -6,8 +6,8 @@
       :addable="addable"
       :closable="closable"
       tab-style="min-width: 80px;"
-      @close="handleClose"
-      @add="handleAdd"
+      @close="handleDeleteDirection"
+      @add="addDirection"
     >
       <n-tab-pane
         v-for="(road, roadIndex) in roads"
@@ -62,10 +62,28 @@
         </n-form>
       </n-tab-pane>
     </n-tabs>
+
+    <!-- modal -->
+
+    <!-- direction add modal -->
+    <n-modal v-model:show="directionAddModal">
+      <n-card>
+        <template #header>
+          <div> 方向 </div>
+        </template>
+        <n-form>
+          <!-- 方向名 -->
+          <n-form-item>
+            <n-input />
+          </n-form-item>
+        </n-form>
+      </n-card>
+    </n-modal>
   </div>
 </template>
 
 <script lang="ts">
+  import { useDialog } from 'naive-ui';
   import { defineComponent, toRefs, ref, computed, PropType } from 'vue';
 
   interface Road {
@@ -103,6 +121,46 @@
       const closableRef = computed(() => {
         return roads.value.length > 1;
       });
+
+      // direction model
+      const directionAddModal = ref(false);
+      // direction add
+      function addDirection() {
+        const directionNew = {
+          direction: '未命名方向',
+          export_numb: '0',
+          import_numb: '0',
+          straight: '0',
+          left: '0',
+          right: '0',
+          turnaround: '0',
+          left_turn: '0',
+          straight_left: '0',
+          straight_right: '0',
+          left_straight_right: '0',
+          variation: '0',
+        };
+        roads.value.push(directionNew);
+        valueRef.value = roads.value.length - 1;
+      }
+      // direction delete
+      const dialog = useDialog();
+      function deleteDirection(index: number) {
+        roads.value.splice(index, 1);
+      }
+      function handleDeleteDirection(id) {
+        dialog.warning({
+          title: '确认删除',
+          content: '确认删除此方向吗？',
+          positiveText: '确定',
+          negativeText: '取消',
+          onPositiveClick: () => {
+            deleteDirection(id);
+            valueRef.value = roads.value.length - 1;
+          },
+        });
+      }
+
       return {
         value: valueRef,
         roads,
@@ -110,6 +168,9 @@
         closable: closableRef,
         handleAdd() {},
         handleClose() {},
+        directionAddModal,
+        addDirection,
+        handleDeleteDirection,
       };
     },
   });
