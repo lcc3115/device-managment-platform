@@ -43,6 +43,15 @@ const routes: Array<RouteRecordRaw> = [
         },
         component: () => import('@/views/crossroad/CrossroadInfo.vue'),
       },
+      {
+        path: 'add',
+        name: 'crossroad_add',
+        meta: {
+          title: '新增路口',
+          hidden: true,
+        },
+        component: () => import('@/views/crossroad/CrossroadInfo.vue'),
+      },
     ],
   },
 ];

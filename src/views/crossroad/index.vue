@@ -12,6 +12,8 @@
             </n-icon>
             <h1 class="text-xl">路口列表</h1>
           </div>
+          <!-- right header -->
+          <n-button type="success" @click="toAddCrossroad">新增路口</n-button>
         </div>
       </template>
       <n-data-table
@@ -32,6 +34,7 @@
   import { h, onMounted, ref } from 'vue';
   import { getCrossroadList } from '@/api/crossroad';
   import TableAction from './components/TableAction.vue';
+  import { useRouter } from 'vue-router';
 
   // Table settings
   const pagination = ref({
@@ -83,7 +86,7 @@
       key: 'edit',
       align: 'center',
       render(data) {
-        return h(TableAction, { id: data.crossing_id });
+        return h(TableAction, { id: data.crossing_id, refresh: updateList });
       },
     },
   ];
@@ -94,9 +97,14 @@
   async function updateList() {
     loading.value = true;
     const res = await getCrossroadList();
-    console.log(res);
     data.value = res;
     loading.value = false;
+  }
+
+  // add
+  const router = useRouter();
+  function toAddCrossroad() {
+    router.push({ name: 'crossroad_add' });
   }
 
   onMounted(async () => {

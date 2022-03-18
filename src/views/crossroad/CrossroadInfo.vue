@@ -22,7 +22,7 @@
                 <n-gi class="p-1">
                   <!-- 路口ID -->
                   <n-form-item-gi label="路口ID" path="crossing_id">
-                    <n-input-number
+                    <n-input
                       v-model:value="crossInfo.crossing_id"
                       placeholder="路口ID（不可修改）"
                       disabled
@@ -150,6 +150,11 @@
               </n-grid>
             </n-form>
           </n-tab-pane>
+
+          <!-- 相位 -->
+          <n-tab-pane name="phase" tab="相位">
+            <RoadPhase :id="crossInfo.crossing_id" />
+          </n-tab-pane>
         </n-tabs>
       </n-card>
     </div>
@@ -158,20 +163,25 @@
 
 <script lang="ts">
   import { defineComponent, ref, onMounted } from 'vue';
-  import { FormInst } from 'naive-ui';
+  import { FormInst, useMessage } from 'naive-ui';
   import RoadList from './components/RoadList.vue';
-  import { getCrossroadInfo, changeCrossroadInfo } from '@/api/crossroad';
+  import RoadPhase from './components/RoadPhase.vue';
+  import { getCrossroadInfo, changeCrossroadInfo, addCrossroad } from '@/api/crossroad';
   import { useRoute } from 'vue-router';
 
   export default defineComponent({
     components: {
       RoadList,
+      RoadPhase,
     },
     setup() {
-      // get cross info
       const crossInfo = ref();
       const subList = ref();
       const route = useRoute();
+      const isAdd = ref(false);
+      const message = useMessage();
+
+      // get cross info
       async function getCrossInfo() {
         const res = await getCrossroadInfo(route.params.id);
         crossInfo.value = res;
@@ -183,13 +193,107 @@
       async function submitInfo() {
         submitLoadingRef.value = true;
         const submitData = crossInfo.value;
-        const res = await changeCrossroadInfo(submitData);
-        console.log(res);
+        if (isAdd.value) {
+          // submit add
+          const res = await addCrossroad(submitData);
+          message.success(`创建${res.d}路口成功`);
+          console.log(res);
+        } else {
+          // submit change
+          const res = await changeCrossroadInfo(submitData);
+          console.log(res);
+        }
         submitLoadingRef.value = false;
       }
 
       onMounted(() => {
-        getCrossInfo();
+        if (route.params.id) {
+          getCrossInfo();
+        } else {
+          // no id,use add crossroad
+          isAdd.value = true;
+          crossInfo.value = {
+            crossing_id: '',
+            intersection: '十字型',
+            Channel: '无',
+            width_Sections_road: '0',
+            width_interse_road: '0',
+            crossing_name: '未命名路口',
+            longitude: '30.1234',
+            latitude: '114.1234',
+            organiz: '借道左转',
+            signal_brand: '海信',
+            road_paving: '沥青',
+            submit_time: '',
+            operater: '0',
+            roadList: [],
+            subList: [
+              {
+                attribute: 'signs',
+                longitude: '30.1234',
+                latitude: '114.1234',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+              {
+                attribute: 'guide',
+                longitude: '30.2345',
+                latitude: '114.2345',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+              {
+                attribute: 'isolation',
+                longitude: '30.2345',
+                latitude: '114.2345',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+              {
+                attribute: 'vehicleSignal',
+                longitude: '30.2345',
+                latitude: '114.2345',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+              {
+                attribute: 'pedeSignal',
+                longitude: '30.2345',
+                latitude: '114.2345',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+              {
+                attribute: 'EPMonitor',
+                longitude: '30.2345',
+                latitude: '114.2345',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+              {
+                attribute: 'videoMonitor',
+                longitude: '30.2345',
+                latitude: '114.2345',
+                east: '无',
+                south: '无',
+                west: '无',
+                north: '无',
+              },
+            ],
+          };
+        }
       });
 
       // set form
