@@ -1,45 +1,70 @@
 <template>
   <n-tree
     block-line
-    :data="data"
+    :data="crossData"
     :default-expanded-keys="defaultExpandedKeys"
     :selectable="false"
   />
 </template>
 
 <script lang="ts">
+  import { NButton, NIcon } from 'naive-ui';
   import { h, defineComponent, ref } from 'vue';
-  import { repeat } from 'seemly';
-  import { NButton, TreeOption } from 'naive-ui';
-
-  function createData(level = 4, baseKey = ''): TreeOption[] | undefined {
-    if (!level) return undefined;
-    return repeat(6 - level, undefined).map((_, index) => {
-      const key = '' + baseKey + level + index;
-      const label = createLabel(level);
-      return {
-        label,
-        key,
-        children: createData(level - 1, key),
-        suffix: () => h(NButton, { text: true, type: 'primary' }, { default: () => 'Suffix' }),
-        prefix: () => h(NButton, { text: true, type: 'primary' }, { default: () => 'Prefix' }),
-      };
-    });
-  }
-
-  function createLabel(level: number): string {
-    if (level === 4) return '道生一';
-    if (level === 3) return '一生二';
-    if (level === 2) return '二生三';
-    if (level === 1) return '三生万物';
-    return '';
-  }
+  import { AirportLocation } from '@vicons/carbon';
 
   export default defineComponent({
     name: 'MapList',
-    setup() {
+    props: {
+      crossList: {
+        type: Array,
+        required: true,
+      },
+    },
+    emits: ['jumpTo'],
+    setup(props, context) {
+      const crossListRef = ref(props.crossList);
+      // map jump
+      function jumpTo(lng: number, lat: number) {
+        context.emit('jumpTo', lng, lat);
+      }
+
+      function createData() {
+        const crossData = crossListRef.value.map((cross: any) => {
+          const lng = Number(cross.longitude);
+          const lat = Number(cross.latitude);
+          const crossTreeOpt = {
+            key: cross.crossing_id,
+            label: cross.crossing_name,
+            suffix: () =>
+              h(
+                NButton,
+                {
+                  text: true,
+                  type: 'primary',
+                  onClick: () => {
+                    jumpTo(lng, lat);
+                  },
+                },
+                {
+                  default: () => h(NIcon, { component: AirportLocation }),
+                }
+              ),
+          };
+          return crossTreeOpt;
+        });
+
+        const mapListData = [
+          {
+            key: 'cross',
+            label: '路口',
+            children: crossData,
+          },
+        ];
+
+        return mapListData;
+      }
       return {
-        data: createData(),
+        crossData: createData(),
         defaultExpandedKeys: ref(['40', '41']),
       };
     },
