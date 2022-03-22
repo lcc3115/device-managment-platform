@@ -2,8 +2,9 @@
   <div class="relative w-full h-full">
     <div class="w-full h-full" ref="coordMap"></div>
     <n-button-group size="small" class="absolute top-4 left-4 z-10">
-      <n-button type="success" @click="jumpTo"> 跳转当前 </n-button>
+      <n-button type="success" @click="jumpTo(lng, lat)"> 跳转当前 </n-button>
       <n-button type="success" @click="reMarker"> 重新选点 </n-button>
+      <n-button type="success" @click="jumpTo(114.30438, 30.59295)"> 返回武汉 </n-button>
     </n-button-group>
   </div>
 </template>
@@ -29,14 +30,17 @@
       const coordMap = ref();
       const markerLayer = ref();
       const crossMarker = ref();
+      const lng = ref(props.coord.lng);
+      const lat = ref(props.coord.lat);
 
       onMounted(() => {
         // create map
         map.value = new Maptalks.Map(coordMap.value, {
-          center: [114.30404, 30.614381],
+          center: [lng.value, lat.value],
           zoom: 14,
           baseLayer: new Maptalks.TileLayer('base', {
             // urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
+            // subdomains: ['a', 'b', 'c', 'd'],
             urlTemplate:
               'http://wprd0{s}.is.autonavi.com/appmaptile?lang=zh_cn&size=1&style=7&x={x}&y={y}&z={z}',
             subdomains: ['1', '2', '3', '4'],
@@ -45,7 +49,8 @@
         });
         // set marker
         markerLayer.value = new Maptalks.VectorLayer('cross').addTo(map.value);
-        crossMarker.value = new Maptalks.Marker([props.coord.lng, props.coord.lat], {
+
+        crossMarker.value = new Maptalks.Marker([lng.value, lat.value], {
           symbol: [
             {
               markerFile: crossroadSvg,
@@ -64,10 +69,10 @@
       });
 
       // jump to point
-      function jumpTo() {
+      function jumpTo(lng, lat) {
         map.value.animateTo(
           {
-            center: [props.coord.lng, props.coord.lat],
+            center: [lng, lat],
             zoom: 17,
             pitch: 0,
             bearing: 0,
@@ -91,6 +96,8 @@
       return {
         coordMap,
         map,
+        lng,
+        lat,
         jumpTo,
         reMarker,
       };

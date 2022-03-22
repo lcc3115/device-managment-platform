@@ -89,10 +89,12 @@
       const dialog = useDialog();
 
       onMounted(async () => {
-        const res = await getCrossroadPhase(props.id);
-        console.log(res);
-        phaseData.value = res;
-        schemaList.value = res.schemaList;
+        if (props.id) {
+          const res = await getCrossroadPhase(props.id);
+          console.log(res);
+          phaseData.value = res;
+          schemaList.value = res.schemaList;
+        }
       });
 
       // handle schema add

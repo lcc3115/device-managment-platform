@@ -10,7 +10,8 @@
 <script lang="ts">
   import { NButton, NIcon } from 'naive-ui';
   import { h, defineComponent, ref } from 'vue';
-  import { AirportLocation } from '@vicons/carbon';
+  import { AirportLocation, Edit } from '@vicons/carbon';
+  import { useRouter } from 'vue-router';
 
   export default defineComponent({
     name: 'MapList',
@@ -27,6 +28,11 @@
       function jumpTo(lng: number, lat: number) {
         context.emit('jumpTo', lng, lat);
       }
+      // router to cross
+      const router = useRouter();
+      function goTo(id) {
+        router.push({ name: 'crossroad_info', params: { id } });
+      }
 
       function createData() {
         const crossData = crossListRef.value.map((cross: any) => {
@@ -36,19 +42,34 @@
             key: cross.crossing_id,
             label: cross.crossing_name,
             suffix: () =>
-              h(
-                NButton,
-                {
-                  text: true,
-                  type: 'primary',
-                  onClick: () => {
-                    jumpTo(lng, lat);
+              h('div', {}, [
+                h(
+                  NButton,
+                  {
+                    text: true,
+                    type: 'primary',
+                    onClick: () => {
+                      jumpTo(lng, lat);
+                    },
                   },
-                },
-                {
-                  default: () => h(NIcon, { component: AirportLocation }),
-                }
-              ),
+                  {
+                    default: () => h(NIcon, { component: AirportLocation }),
+                  }
+                ),
+                h(
+                  NButton,
+                  {
+                    text: true,
+                    type: 'primary',
+                    onClick: () => {
+                      goTo(cross.crossing_id);
+                    },
+                  },
+                  {
+                    default: () => h(NIcon, { component: Edit }),
+                  }
+                ),
+              ]),
           };
           return crossTreeOpt;
         });

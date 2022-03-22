@@ -37,13 +37,13 @@
                   <n-grid cols="2">
                     <!-- lng -->
                     <n-gi class="p-1">
-                      <n-form-item-gi label="经度" path="longitude">
+                      <n-form-item-gi label="经度(GCJ02)" path="longitude">
                         <n-input v-model:value="crossInfo.longitude" placeholder="经度" />
                       </n-form-item-gi>
                     </n-gi>
                     <!-- lat -->
                     <n-gi class="p-1">
-                      <n-form-item-gi label="纬度" path="latitude">
+                      <n-form-item-gi label="纬度(GCJ02)" path="latitude">
                         <n-input v-model:value="crossInfo.latitude" placeholder="纬度" />
                       </n-form-item-gi>
                     </n-gi>
@@ -77,10 +77,7 @@
 
                 <!-- map coordinate -->
                 <n-gi class="w-full h-full bg-gray-500">
-                  <Coordinate
-                    :coord="{ lng: Number(crossInfo.longitude), lat: Number(crossInfo.latitude) }"
-                    @set-new-coord="setNewCoord"
-                  />
+                  <Coordinate :coord="crossCoord" @set-new-coord="setNewCoord" />
                 </n-gi>
               </n-grid>
             </n-form>
@@ -120,7 +117,7 @@
                 >
                   <n-card :title="getDeviceName(device.attribute)">
                     <n-grid :cols="4" :x-gap="8">
-                      <n-form-item-gi :span="2" label="经度">
+                      <n-form-item-gi :span="2" label="经度(GCJ02)">
                         <n-input
                           v-model:value="device.longitude"
                           type="text"
@@ -129,7 +126,7 @@
                           clearable
                         />
                       </n-form-item-gi>
-                      <n-form-item-gi :span="2" label="纬度">
+                      <n-form-item-gi :span="2" label="纬度(GCJ02)">
                         <n-input
                           v-model:value="device.latitude"
                           type="text"
@@ -184,7 +181,7 @@
 </template>
 
 <script lang="ts">
-  import { defineComponent, ref, onMounted } from 'vue';
+  import { defineComponent, ref, onMounted, computed } from 'vue';
   import { FormInst, useMessage } from 'naive-ui';
   import RoadList from './components/RoadList.vue';
   import RoadPhase from './components/RoadPhase.vue';
@@ -204,6 +201,20 @@
       const route = useRoute();
       const isAdd = ref(false);
       const message = useMessage();
+      const crossCoord = computed({
+        get() {
+          return {
+            lng: Number(crossInfo.value.longitude),
+            lat: Number(crossInfo.value.latitude),
+          };
+        },
+        set(coord: any) {
+          const lng = coord.x.toFixed(5);
+          const lat = coord.y.toFixed(5);
+          crossInfo.value.longitude = `${lng}`;
+          crossInfo.value.latitude = `${lat}`;
+        },
+      });
 
       // get cross info
       async function getCrossInfo() {
@@ -362,6 +373,7 @@
         subList,
         submitInfo,
         submitLoading: submitLoadingRef,
+        crossCoord,
       };
     },
     methods: {
@@ -386,10 +398,7 @@
         }
       },
       setNewCoord(coord) {
-        const lng = coord.x.toFixed(5);
-        const lat = coord.y.toFixed(5);
-        this.crossInfo.longitude = `${lng}`;
-        this.crossInfo.latitude = `${lat}`;
+        this.crossCoord = coord;
       },
     },
   });

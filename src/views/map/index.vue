@@ -55,7 +55,6 @@
     map.value.animateTo(
       {
         center: [lng, lat],
-        zoom: 13,
         pitch: 0,
         bearing: 0,
       },
