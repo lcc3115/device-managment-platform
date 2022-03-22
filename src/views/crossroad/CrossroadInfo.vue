@@ -33,6 +33,21 @@
                   <n-form-item-gi label="路口名" path="crossing_name">
                     <n-input v-model:value="crossInfo.crossing_name" placeholder="路口名" />
                   </n-form-item-gi>
+                  <!-- 经纬度 -->
+                  <n-grid cols="2">
+                    <!-- lng -->
+                    <n-gi class="p-1">
+                      <n-form-item-gi label="经度" path="longitude">
+                        <n-input v-model:value="crossInfo.longitude" placeholder="经度" />
+                      </n-form-item-gi>
+                    </n-gi>
+                    <!-- lat -->
+                    <n-gi class="p-1">
+                      <n-form-item-gi label="纬度" path="latitude">
+                        <n-input v-model:value="crossInfo.latitude" placeholder="纬度" />
+                      </n-form-item-gi>
+                    </n-gi>
+                  </n-grid>
                   <!-- 交叉口类型 -->
                   <n-form-item-gi label="交叉口类型" path="intersection">
                     <n-select
@@ -59,7 +74,14 @@
                     />
                   </n-form-item-gi>
                 </n-gi>
-                <n-gi class="p-1" />
+
+                <!-- map coordinate -->
+                <n-gi class="w-full h-full bg-gray-500">
+                  <Coordinate
+                    :coord="{ lng: Number(crossInfo.longitude), lat: Number(crossInfo.latitude) }"
+                    @set-new-coord="setNewCoord"
+                  />
+                </n-gi>
               </n-grid>
             </n-form>
           </n-tab-pane>
@@ -166,6 +188,7 @@
   import { FormInst, useMessage } from 'naive-ui';
   import RoadList from './components/RoadList.vue';
   import RoadPhase from './components/RoadPhase.vue';
+  import Coordinate from './components/Coordinate.vue';
   import { getCrossroadInfo, changeCrossroadInfo, addCrossroad } from '@/api/crossroad';
   import { useRoute } from 'vue-router';
 
@@ -173,6 +196,7 @@
     components: {
       RoadList,
       RoadPhase,
+      Coordinate,
     },
     setup() {
       const crossInfo = ref();
@@ -360,6 +384,12 @@
           default:
             return '未命名设备';
         }
+      },
+      setNewCoord(coord) {
+        const lng = coord.x.toFixed(5);
+        const lat = coord.y.toFixed(5);
+        this.crossInfo.longitude = `${lng}`;
+        this.crossInfo.latitude = `${lat}`;
       },
     },
   });
