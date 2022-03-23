@@ -1,70 +1,75 @@
 <template>
-  <div class="relative w-full h-full">
-    <div class="absolute top-0 right-0 z-10">
-      <n-button type="success" @click="handleSubmitPhase" :loading="submitPhaseLoading"
-        >更新相位信息</n-button
+  <div class="w-full h-full">
+    <div v-if="id" class="relative w-full h-full">
+      <div class="flex flex-row justify-between">
+        <div></div>
+        <n-button type="success" @click="handleSubmitPhase" :loading="submitPhaseLoading"
+          >更新相位信息</n-button
+        >
+      </div>
+      <n-tabs
+        v-if="phaseData"
+        v-model:value="schemaTab"
+        type="card"
+        closable
+        addable
+        @close="handleSchemaDelete"
+        @add="handleSchemaAdd"
       >
-    </div>
-    <n-tabs
-      v-if="phaseData"
-      v-model:value="schemaTab"
-      type="card"
-      closable
-      addable
-      @close="handleSchemaDelete"
-      @add="handleSchemaAdd"
-    >
-      <n-tab-pane
-        v-for="(schema, schemaIndex) in schemaList"
-        :key="schemaIndex"
-        :name="schemaIndex"
-        :tab="schema.schema_name"
-      >
-        <n-form :model="schema">
-          <n-form-item label="计划名称" path="schema.schema_name">
-            <n-input v-model:value="schema.schema_name" placeholder="计划名称" />
-          </n-form-item>
+        <n-tab-pane
+          v-for="(schema, schemaIndex) in schemaList"
+          :key="schemaIndex"
+          :name="schemaIndex"
+          :tab="schema.schema_name"
+        >
+          <n-form :model="schema">
+            <n-form-item label="计划名称" path="schema.schema_name">
+              <n-input v-model:value="schema.schema_name" placeholder="计划名称" />
+            </n-form-item>
 
-          <n-form-item label="计划周期" path="schema.cycle">
-            <n-input v-model:value="schema.cycle" placeholder="计划周期" />
-          </n-form-item>
+            <n-form-item label="计划周期" path="schema.cycle">
+              <n-input v-model:value="schema.cycle" placeholder="计划周期" />
+            </n-form-item>
 
-          <n-tabs
-            v-model:value="phaseTab"
-            type="card"
-            closable
-            addable
-            @close="handlePhaseDelete"
-            @add="handlePhaseAdd"
-          >
-            <n-tab-pane
-              v-for="(phase, phaseIndex) in schema.phaseList"
-              :key="phaseIndex"
-              :name="phaseIndex"
-              :tab="phase.timing_name"
+            <n-tabs
+              v-model:value="phaseTab"
+              type="card"
+              closable
+              addable
+              @close="handlePhaseDelete"
+              @add="handlePhaseAdd"
             >
-              <n-form :model="phase">
-                <n-form-item label="相位" path="phase.timing_name">
-                  <n-input v-model:value="phase.timing_name" placeholder="相位名称" />
-                </n-form-item>
+              <n-tab-pane
+                v-for="(phase, phaseIndex) in schema.phaseList"
+                :key="phaseIndex"
+                :name="phaseIndex"
+                :tab="phase.timing_name"
+              >
+                <n-form :model="phase">
+                  <n-form-item label="相位" path="phase.timing_name">
+                    <n-input v-model:value="phase.timing_name" placeholder="相位名称" />
+                  </n-form-item>
 
-                <n-form-item label="绿灯" path="phase.phase_green">
-                  <n-input v-model:value="phase.phase_green" placeholder="绿灯周期" />
-                </n-form-item>
+                  <n-form-item label="绿灯" path="phase.phase_green">
+                    <n-input v-model:value="phase.phase_green" placeholder="绿灯周期" />
+                  </n-form-item>
 
-                <n-form-item label="黄灯" path="phase.phase_yellow">
-                  <n-input v-model:value="phase.phase_yellow" placeholder="黄灯周期" />
-                </n-form-item>
+                  <n-form-item label="黄灯" path="phase.phase_yellow">
+                    <n-input v-model:value="phase.phase_yellow" placeholder="黄灯周期" />
+                  </n-form-item>
 
-                <n-form-item label="红灯" path="phase.phase_red">
-                  <n-input v-model:value="phase.phase_red" placeholder="红灯周期" />
-                </n-form-item>
-              </n-form>
-            </n-tab-pane>
-          </n-tabs>
-        </n-form>
-      </n-tab-pane>
-    </n-tabs>
+                  <n-form-item label="红灯" path="phase.phase_red">
+                    <n-input v-model:value="phase.phase_red" placeholder="红灯周期" />
+                  </n-form-item>
+                </n-form>
+              </n-tab-pane>
+            </n-tabs>
+          </n-form>
+        </n-tab-pane>
+      </n-tabs>
+    </div>
+
+    <div v-else> 请在创建路口完成后，从路口列表进入此路口完成此路口相位编辑。 </div>
   </div>
 </template>
 

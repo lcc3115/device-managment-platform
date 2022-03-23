@@ -1,18 +1,21 @@
 <template>
   <div class="relative w-full h-full">
     <div class="w-full h-full" ref="coordMap"></div>
-    <n-button-group size="small" class="absolute top-4 left-4 z-10">
+    <n-button-group size="small" class="absolute top-4 left-4 z-10" :vertical="true">
       <n-button type="success" @click="jumpTo(lng, lat)"> 跳转当前 </n-button>
       <n-button type="success" @click="reMarker"> 重新选点 </n-button>
       <n-button type="success" @click="jumpTo(114.30438, 30.59295)"> 返回武汉 </n-button>
+      <n-button type="success" @click="jumpToGeo"> 设备定位 </n-button>
     </n-button-group>
   </div>
 </template>
 
 <script lang="ts">
-  import { defineComponent, onMounted, ref } from 'vue';
+  import { defineComponent, onMounted, ref, watch } from 'vue';
   import * as Maptalks from 'maptalks';
   import crossroadSvg from '@/assets/markers/crossroad.svg';
+  import { useGeolocation } from '@vueuse/core';
+  import { useWindowSize } from '@vueuse/core';
 
   export default defineComponent({
     name: 'Coordinate',
@@ -32,12 +35,25 @@
       const crossMarker = ref();
       const lng = ref(props.coord.lng);
       const lat = ref(props.coord.lat);
+      const getLocation = useGeolocation();
+      const { width } = useWindowSize();
+      const isBigger = ref(false);
+      watch(width, (v) => {
+        if (v <= 1080) {
+          isBigger.value = true;
+        } else {
+          isBigger.value = false;
+        }
+      });
 
       onMounted(() => {
         // create map
         map.value = new Maptalks.Map(coordMap.value, {
           center: [lng.value, lat.value],
           zoom: 14,
+          dragPitch: false,
+          dragRotate: false,
+          dragRotatePitch: false,
           baseLayer: new Maptalks.TileLayer('base', {
             // urlTemplate: 'https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}.png',
             // subdomains: ['a', 'b', 'c', 'd'],
@@ -83,6 +99,14 @@
         );
       }
 
+      // jump to device point
+      function jumpToGeo() {
+        const { coords } = getLocation;
+        if (coords.value.longitude !== Infinity) {
+          jumpTo(coords.value.longitude, coords.value.latitude);
+        }
+      }
+
       // reMarker
       function reMarker() {
         map.value.once('click', (param) => {
@@ -100,6 +124,8 @@
         lat,
         jumpTo,
         reMarker,
+        jumpToGeo,
+        isBigger,
       };
     },
   });

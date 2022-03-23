@@ -18,7 +18,7 @@
           <!-- basic info -->
           <n-tab-pane name="basic" tab="基本信息">
             <n-form ref="basicInfoForm" :model="crossInfo">
-              <n-grid cols="2">
+              <n-grid cols="0:1 1080:2">
                 <n-gi class="p-1">
                   <!-- 路口ID -->
                   <n-form-item-gi label="路口ID" path="crossing_id">
@@ -76,7 +76,7 @@
                 </n-gi>
 
                 <!-- map coordinate -->
-                <n-gi class="w-full h-full bg-gray-500">
+                <n-gi class="w-full h-full min-h-500px bg-gray-500">
                   <Coordinate :coord="crossCoord" @set-new-coord="setNewCoord" />
                 </n-gi>
               </n-grid>
@@ -86,21 +86,17 @@
           <!-- 渠化和设施 -->
           <n-tab-pane name="road" tab="渠化">
             <n-form ref="roadForm" :model="crossInfo">
-              <n-grid cols="4">
-                <!-- 渠化 -->
-                <n-gi :span="3" class="p-1">
-                  <n-card :bordered="false" content-style="padding: 0;">
-                    <RoadList :road-list="crossInfo.roadList" />
-                  </n-card>
-                </n-gi>
-              </n-grid>
+              <!-- 渠化 -->
+              <n-card :bordered="false" content-style="padding: 0;">
+                <RoadList :road-list="crossInfo.roadList" />
+              </n-card>
             </n-form>
           </n-tab-pane>
 
           <!-- 设施 -->
           <n-tab-pane name="device" tab="设施">
-            <n-form class="w-2/3">
-              <n-grid :cols="4" :x-gap="32">
+            <n-form>
+              <n-grid cols="0:1 1080:2" :x-gap="32">
                 <!-- 信号机品牌 -->
                 <n-form-item-gi :span="4" label="信号机品牌" path="intersection">
                   <n-select
@@ -110,11 +106,7 @@
                   />
                 </n-form-item-gi>
 
-                <n-form-item-gi
-                  :span="2"
-                  v-for="(device, deviceIndex) in subList"
-                  :key="deviceIndex"
-                >
+                <n-form-item-gi v-for="(device, deviceIndex) in subList" :key="deviceIndex">
                   <n-card :title="getDeviceName(device.attribute)">
                     <n-grid :cols="4" :x-gap="8">
                       <n-form-item-gi :span="2" label="经度(GCJ02)">
@@ -328,6 +320,7 @@
               },
             ],
           };
+          subList.value = crossInfo.value.subList;
         }
       });
 
