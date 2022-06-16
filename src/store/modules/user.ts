@@ -60,7 +60,15 @@ export const useUserStore = defineStore({
     // 登录
     async login(userInfo) {
       try {
-        const response = await login(userInfo);
+        // const response = await login(userInfo);
+        const response = {
+          code: 200,
+          result: {
+            token: 'YVVXINZRBLPFQISGXMKKHDZECVGAEKNW',
+          },
+          message: 'ok',
+          type: 'success',
+        };
         const { result, code } = response;
         if (code === ResultEnum.SUCCESS) {
           const ex = 7 * 24 * 60 * 60 * 1000;
@@ -82,7 +90,42 @@ export const useUserStore = defineStore({
       return new Promise((resolve, reject) => {
         getUserInfo()
           .then((res) => {
-            const result = res;
+            const result = {
+              code: 200,
+              result: {
+                userId: '1',
+                username: 'admin',
+                realName: 'Admin',
+                avatar: 'http://dummyimage.com/300x600',
+                desc: 'manager',
+                password: 'VFILIP',
+                token: 'YVVXINZRBLPFQISGXMKKHDZECVGAEKNW',
+                permissions: [
+                  {
+                    label: '主控台',
+                    value: 'dashboard_console',
+                  },
+                  {
+                    label: '监控页',
+                    value: 'dashboard_monitor',
+                  },
+                  {
+                    label: '工作台',
+                    value: 'dashboard_workplace',
+                  },
+                  {
+                    label: '基础列表',
+                    value: 'basic_list',
+                  },
+                  {
+                    label: '基础列表删除',
+                    value: 'basic_list_delete',
+                  },
+                ],
+              },
+              message: 'ok',
+              type: 'success',
+            }.result;
             if (result.permissions && result.permissions.length) {
               const permissionsList = result.permissions;
               that.setPermissions(permissionsList);

@@ -19,6 +19,17 @@ export function getCrossroadInfo(crossing_id) {
   });
 }
 
+//条件查询路口主列表
+export function searchCrossInfo(submitData) {
+  return http.request({
+    url: '/SearchCrossInfo',
+    method: 'get',
+    params: {
+      jsonData: JSON.stringify(submitData)
+    },
+  });
+}
+
 //修改路口数据
 export function changeCrossroadInfo(crossroad_info) {
   return http.request({

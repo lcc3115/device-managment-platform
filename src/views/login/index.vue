@@ -4,8 +4,9 @@
     <div class="view-account-container">
       <div class="view-account-top">
         <div class="view-account-top-logo">
-          <h1 class="text-4xl font-bold my-4">交通设备管理平台</h1>
+          <img src="~@/assets/images/account-logo.png" alt="" />
         </div>
+        <div class="view-account-top-desc">Naive Ui Admin中台前端/设计解决方案</div>
       </div>
       <div class="view-account-form">
         <n-form
@@ -55,6 +56,23 @@
           </n-form-item>
           <n-form-item class="default-color">
             <div class="flex view-account-other">
+              <div class="flex-initial">
+                <span>其它登录方式</span>
+              </div>
+              <div class="flex-initial mx-2">
+                <a href="javascript:">
+                  <n-icon size="24" color="#2d8cf0">
+                    <LogoGithub />
+                  </n-icon>
+                </a>
+              </div>
+              <div class="flex-initial mx-2">
+                <a href="javascript:">
+                  <n-icon size="24" color="#2d8cf0">
+                    <LogoFacebook />
+                  </n-icon>
+                </a>
+              </div>
               <div class="flex-initial" style="margin-left: auto">
                 <a href="javascript:">注册账号</a>
               </div>
@@ -72,7 +90,7 @@
   import { useUserStore } from '@/store/modules/user';
   import { useMessage } from 'naive-ui';
   import { ResultEnum } from '@/enums/httpEnum';
-  import { PersonOutline, LockClosedOutline } from '@vicons/ionicons5';
+  import { PersonOutline, LockClosedOutline, LogoGithub, LogoFacebook } from '@vicons/ionicons5';
   import { PageEnum } from '@/enums/pageEnum';
 
   interface FormState {

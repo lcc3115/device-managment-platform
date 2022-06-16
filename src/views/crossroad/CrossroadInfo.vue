@@ -62,7 +62,6 @@
                       v-model:value="crossInfo.organiz"
                       placeholder="交通组织"
                       :options="organizOpts"
-                      multiple
                     />
                   </n-form-item-gi>
                   <!-- 路面铺装 -->
@@ -71,6 +70,30 @@
                       v-model:value="crossInfo.road_paving"
                       placeholder="路面铺装"
                       :options="roadPavingOpts"
+                    />
+                  </n-form-item-gi>
+                  <!-- 道路展宽 -->
+                  <n-form-item-gi label="道路展宽" path="broadening">
+                    <n-select
+                      v-model:value="crossInfo.broadening"
+                      placeholder="道路展宽"
+                      :options="yn"
+                    />
+                  </n-form-item-gi>
+                  <!-- 信控路口 -->
+                  <n-form-item-gi label="信控路口" path="issignalcross">
+                    <n-select
+                      v-model:value="crossInfo.issignalcross"
+                      placeholder="信控路口"
+                      :options="yn"
+                    />
+                  </n-form-item-gi>
+                  <!-- 路口渠化 -->
+                  <n-form-item-gi label="路口渠化" path="Channel">
+                    <n-select
+                      v-model:value="crossInfo.Channel"
+                      placeholder="路口渠化"
+                      :options="yn"
                     />
                   </n-form-item-gi>
                 </n-gi>
@@ -109,7 +132,7 @@
                 <n-form-item-gi v-for="(device, deviceIndex) in subList" :key="deviceIndex">
                   <n-card :title="getDeviceName(device.attribute)">
                     <n-grid :cols="4" :x-gap="8">
-                      <n-form-item-gi :span="2" label="经度(GCJ02)">
+                      <!-- <n-form-item-gi :span="2" label="经度(GCJ02)">
                         <n-input
                           v-model:value="device.longitude"
                           type="text"
@@ -126,7 +149,7 @@
                           size="medium"
                           clearable
                         />
-                      </n-form-item-gi>
+                      </n-form-item-gi> -->
                       <n-form-item-gi label="东">
                         <n-switch
                           v-model:value="device.east"
@@ -154,6 +177,23 @@
                           checked-value="有"
                           unchecked-value="无"
                         />
+                      </n-form-item-gi>
+                      <n-form-item-gi :span="4" v-if="device.attribute === 'vehicleSignal'">
+                        <n-tabs type="line" size="medium">
+                          <n-tab-pane
+                            v-for="(light, index) in trafficLightList"
+                            :key="index"
+                            :name="index"
+                            :tab="light.direction"
+                          >
+                            <n-select
+                              :value="renderLabel(light)"
+                              multiple
+                              :options="options"
+                              @update:value="updateLabel($event, index)"
+                            />
+                          </n-tab-pane>
+                        </n-tabs>
                       </n-form-item-gi>
                     </n-grid>
                   </n-card>
@@ -208,15 +248,68 @@
         },
       });
 
+      const trafficLightList = ref();
+
+      function renderLabel(light) {
+        const list: any[] = [];
+        for (const key in light) {
+          const e = light[key];
+          if (e === '1') {
+            list.push(key);
+          }
+        }
+        console.log(list);
+        return list;
+      }
+
+      function updateLabel(value, index) {
+        trafficLightList.value[index] = {
+          direction: trafficLightList.value[index].direction,
+          left: '0',
+          right: '0',
+          round: '0',
+          straight: '0',
+          turnaround: '0',
+        };
+        value.forEach((key) => {
+          trafficLightList.value[index][key] = '1';
+        });
+      }
+
+      const options = [
+        {
+          label: '直行灯',
+          value: 'straight',
+        },
+        {
+          label: '左转灯',
+          value: 'left',
+        },
+        {
+          label: '右转灯',
+          value: 'right',
+        },
+        {
+          label: '掉头灯',
+          value: 'turnaround',
+        },
+        {
+          label: '圆盘灯',
+          value: 'round',
+        },
+      ];
+
       // get cross info
       async function getCrossInfo() {
         const res = await getCrossroadInfo(route.params.id);
         crossInfo.value = res;
         subList.value = crossInfo.value.subList;
+        trafficLightList.value = crossInfo.value.phaseList;
       }
 
       // submit cross info
       const submitLoadingRef = ref(false);
+      
       async function submitInfo() {
         submitLoadingRef.value = true;
         const submitData = crossInfo.value;
@@ -242,15 +335,17 @@
           crossInfo.value = {
             crossing_id: '',
             intersection: '十字型',
-            Channel: '无',
+            Channel: '是',
             width_Sections_road: '0',
             width_interse_road: '0',
             crossing_name: '未命名路口',
-            longitude: '30.1234',
-            latitude: '114.1234',
+            longitude: '114.1234',
+            latitude: '30.1234',
             organiz: '借道左转',
             signal_brand: '海信',
             road_paving: '沥青',
+            broadening: '否',
+            issignalcross: '是',
             submit_time: '',
             operater: '0',
             roadList: [],
@@ -319,8 +414,43 @@
                 north: '无',
               },
             ],
+            phaseList: [
+              {
+                direction: '东',
+                straight: '0',
+                left: '0',
+                right: '0',
+                turnaround: '0',
+                round: '0',
+              },
+              {
+                direction: '南',
+                straight: '0',
+                left: '0',
+                right: '0',
+                turnaround: '0',
+                round: '0',
+              },
+              {
+                direction: '西',
+                straight: '0',
+                left: '0',
+                right: '0',
+                turnaround: '0',
+                round: '0',
+              },
+              {
+                direction: '北',
+                straight: '0',
+                left: '0',
+                right: '0',
+                turnaround: '0',
+                round: '0',
+              },
+            ],
           };
           subList.value = crossInfo.value.subList;
+          trafficLightList.value = crossInfo.value.phaseList;
         }
       });
 
@@ -337,7 +467,7 @@
           };
         }
       );
-      const organizOpts = ['借道左转', '可变车道'].map((v) => {
+      const organizOpts = ['借道左转', '可变车道','无'].map((v) => {
         return {
           label: v,
           value: v,
@@ -349,7 +479,13 @@
           value: v,
         };
       });
-      const signalBrandOpts = ['海信', '海康', '西门子'].map((v) => {
+      const signalBrandOpts = ['海信', '海康', '西门子','其他','无'].map((v) => {
+        return {
+          label: v,
+          value: v,
+        };
+      });
+      const yn = ['是', '否'].map((v) => {
         return {
           label: v,
           value: v,
@@ -367,6 +503,11 @@
         submitInfo,
         submitLoading: submitLoadingRef,
         crossCoord,
+        trafficLightList,
+        options,
+        renderLabel,
+        updateLabel,
+        yn
       };
     },
     methods: {

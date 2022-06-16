@@ -16,9 +16,43 @@ export interface BasicPageParams {
  * @description: 获取用户信息
  */
 export function getUserInfo() {
-  return http.request({
-    url: '/admin_info',
-    method: 'get',
+  return new Promise((res) => {
+    res({
+      code: 200,
+      result: {
+        userId: '1',
+        username: 'admin',
+        realName: 'Admin',
+        avatar: 'http://dummyimage.com/300x600',
+        desc: 'manager',
+        password: 'VFILIP',
+        token: 'YVVXINZRBLPFQISGXMKKHDZECVGAEKNW',
+        permissions: [
+          {
+            label: '主控台',
+            value: 'dashboard_console',
+          },
+          {
+            label: '监控页',
+            value: 'dashboard_monitor',
+          },
+          {
+            label: '工作台',
+            value: 'dashboard_workplace',
+          },
+          {
+            label: '基础列表',
+            value: 'basic_list',
+          },
+          {
+            label: '基础列表删除',
+            value: 'basic_list_delete',
+          },
+        ],
+      },
+      message: 'ok',
+      type: 'success',
+    });
   });
 }
 

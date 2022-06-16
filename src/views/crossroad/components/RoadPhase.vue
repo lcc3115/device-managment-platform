@@ -77,6 +77,7 @@
   import { defineComponent, onMounted, ref } from 'vue';
   import { getCrossroadPhase, changeCrossroadPhase } from '@/api/crossroad';
   import { useDialog } from 'naive-ui';
+  import { id } from 'date-fns/locale';
 
   export default defineComponent({
     name: 'RoadPhase',
@@ -95,8 +96,31 @@
 
       onMounted(async () => {
         if (props.id) {
-          const res = await getCrossroadPhase(props.id);
+          let res = await getCrossroadPhase(props.id);
           console.log(res);
+          if (!res) {
+            res = {
+              crossing_id: id,
+              schemaList: [
+                {
+                  schema_id: '0',
+                  schema_name: '未命名计划',
+                  cycle: '0',
+                  submit_time: '',
+                  operater: '0',
+                  phaseList: [
+                    {
+                      timing_id: '1',
+                      timing_name: '未命名相位',
+                      phase_green: '0',
+                      phase_yellow: '0',
+                      phase_red: '0',
+                    },
+                  ],
+                },
+              ],
+            };
+          }
           phaseData.value = res;
           schemaList.value = res.schemaList;
         }

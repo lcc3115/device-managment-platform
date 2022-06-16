@@ -53,7 +53,7 @@ const transform: AxiosTransform = {
 
     let { data } = res;
     console.log(data);
-    if (!data.code) {
+    if (!data || !data.code) {
       const result = data;
       data = {
         code: 200,
