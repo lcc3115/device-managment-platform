@@ -89,12 +89,12 @@
   
   
   const letCrossInfo = ref({
-    crossing_name: "未命名路口",
-    issignalcross: "是",
-    intersection: "十字型",
-    broadening: "否",
-    signal_brand: "海信",
-    Channel: "是"
+    crossing_name: "",
+    issignalcross: "",
+    intersection: "",
+    broadening: "",
+    signal_brand: "",
+    Channel: ""
   });
     
   
@@ -176,7 +176,6 @@
     loading.value = true;
     const res = await getCrossroadList();
     data.value = res;
-    console.log(data.value);
     loading.value = false;
     
   }
@@ -190,12 +189,9 @@
   
 
   //查询路口主列表
-   function searchCrossMain() {
-    console.log('letCrossInfo.value:');
-    console.log(letCrossInfo.value);
+   async function searchCrossMain() {
     loading.value = true;
-    const res =  searchCrossInfo(letCrossInfo.value);
-    
+    const res = await searchCrossInfo(letCrossInfo.value);
     data.value = res;
     loading.value = false;
     
