@@ -21,42 +21,42 @@
         </div>
         <br/>
         <div>
-          <n-form class="px-2" label-placement="left" :model="crossInfo">
+          <n-form class="px-2" label-placement="left" :model="letCrossInfo">
             <n-grid :cols="6" x-gap="8">
               <n-form-item-gi  label="路口名" path="crossing_name">
-                <n-input type="text" v-model:value="crossInfo.crossing_name" placeholder="路口名" clearable />
+                <n-input type="text" v-model:value="letCrossInfo.crossing_name" placeholder="路口名" clearable />
               </n-form-item-gi>
               <n-form-item-gi  label="信控路口" path="issignalcross">
                 <n-select
-                  v-model:value="crossInfo.issignalcross"
+                  v-model:value="letCrossInfo.issignalcross"
                   placeholder="信控路口"
                   :options="yn"
                 />
               </n-form-item-gi>
               <n-form-item-gi  label="交叉口类型" path="intersection">
                 <n-select
-                  v-model:value="crossInfo.intersection"
+                  v-model:value="letCrossInfo.intersection"
                   placeholder="交叉口类型"
                   :options="intersectionOpts"
                 />
               </n-form-item-gi>
               <n-form-item-gi  label="道路展宽" path="broadening">
                 <n-select
-                  v-model:value="crossInfo.broadening"
+                  v-model:value="letCrossInfo.broadening"
                   placeholder="道路展宽"
                   :options="yn"
                 />
               </n-form-item-gi>
               <n-form-item-gi  label="信号机品牌" path="signal_brand">
                 <n-select
-                  v-model:value="crossInfo.signal_brand"
+                  v-model:value="letCrossInfo.signal_brand"
                   placeholder="信号机品牌"
                   :options="signalBrandOpts"
                 />
               </n-form-item-gi>
               <n-form-item-gi  label="路口渠化" path="Channel">
                 <n-select
-                  v-model:value="crossInfo.Channel"
+                  v-model:value="letCrossInfo.Channel"
                   placeholder="路口渠化"
                   :options="yn"
                 />
@@ -79,30 +79,24 @@
 </template>
 
 <script lang="ts" setup>
-  import crossInfo from './CrossroadInfo.vue';
+
+  //import crossInfo from './CrossroadInfo.vue';
   import { Crossroads } from '@vicons/carbon';
   import {  h, onMounted, ref } from 'vue';
   import { searchCrossInfo, getCrossroadList } from '@/api/crossroad';
   import TableAction from './components/TableAction.vue';
   import { useRouter } from 'vue-router';
-  // interface crossInfo {
-  //   Channel: string;
-  //   crossing_name: string;
-  //   intersection: string;
-  //   signal_brand: string;
-  //   broadening: string;
-  //   issignalcross: string;
-  // }
-  // const crossInfo = {
-  //   Channel: '',
-  // crossing_name: '',
-  // intersection: '',
-  // signal_brand: '',
-  // broadening: '',
-  // issignalcross: ''
-  // };
   
   
+  const letCrossInfo = ref({
+    crossing_name: "未命名路口",
+    issignalcross: "是",
+    intersection: "十字型",
+    broadening: "否",
+    signal_brand: "海信",
+    Channel: "是"
+  });
+    
   
   // Table settings
   const pagination = ref({
@@ -196,10 +190,11 @@
   
 
   //查询路口主列表
-  async function searchCrossMain() {
-    console.log(crossInfo);
+   function searchCrossMain() {
+    console.log('letCrossInfo.value:');
+    console.log(letCrossInfo.value);
     loading.value = true;
-    const res = await searchCrossInfo(crossInfo);
+    const res =  searchCrossInfo(letCrossInfo.value);
     
     data.value = res;
     loading.value = false;
