@@ -20,7 +20,8 @@
 <script lang="ts" setup>
   import { ref, onMounted, watch } from 'vue';
   import * as Maptalks from 'maptalks';
-  import { Marker, Layer } from 'maptalks';
+  import { Marker } from 'maptalks';//Layer
+  import { ClusterLayer } from 'maptalks.markercluster';
   import MapList from './components/MapList/index.vue';
   import { getCrossroadList } from '@/api/crossroad';
   import crossroadSvg from '@/assets/markers/crossroad.svg';
@@ -31,7 +32,9 @@
 
   // cross point
   const crossList = ref();
-  const crossLayer = ref<Layer>();
+  let clusterLayer;
+  //const crossLayer = ref<Layer>();
+  //const clusterLayer = ref<ClusterLayer>();
 
   async function getCrossList() {
     const res = await getCrossroadList();
@@ -39,15 +42,45 @@
   }
 
   function drawPoint(markers: Marker[]) {
+
+     map.value.removeLayer(clusterLayer);
+
     // clean Layer
-    if (crossLayer.value) {
-      crossLayer.value.remove();
-    }
-    // set new Layer
-    crossLayer.value = new Maptalks.VectorLayer('cross').addTo(map.value);
-    markers.forEach((m) => {
-      m.addTo(crossLayer.value);
+    // if (clusterLayer.value) {
+    //   clusterLayer.value.remove();
+    // }
+    
+    //init layer and push markers
+    clusterLayer = new ClusterLayer('group1', markers ,{
+      'noClusterWithOneMarker' : false,
+      'noClusterWithHowMany': 3,//聚合的最小个数
+      'maxClusterZoom' : 15,
+      //"count" is an internal variable: marker count in the cluster.
+      'symbol': {
+        'markerType' : 'ellipse',
+        'markerFill' : { property:'count', type:'interval', stops: [[0, 'rgb(216, 115, 149)'], [9, 'rgb(116, 115, 149)'],[50, '#1bbc9b'],
+            [99, 'rgb(135, 196, 240)']]},
+        'markerFillOpacity' : 0.7,
+        'markerLineOpacity' : 1,
+        'markerLineWidth' : 3,
+        'markerLineColor' : '#fff',
+        'markerWidth' : { property:'count', type:'interval', stops: [[0, 40], [9, 60], [50, 70],[99, 80]] },
+        'markerHeight' : { property:'count', type:'interval', stops: [[0, 40], [9, 60], [50, 70],[99, 80]] }
+      },
+      'drawClusterText': true,
+      'geometryEvents' : true,
+      'single': true
     });
+
+    map.value.addLayer(clusterLayer);
+
+    // markers.forEach((m) => {
+    //   m.addTo(clusterLayer);
+    // });
+    // set new Layer
+    //clusterLayer.value = new Maptalks.VectorLayer('cross').addTo(map.value);
+    
+    
   }
 
   // jump to point
@@ -66,12 +99,12 @@
 
   // 监听列表改变
   watch(crossList, (v) => {
-    console.log(v);
+    //console.log(v);
     // cross marker list
     const markers = v.map((cross) => {
       const lng = Number(cross.longitude);
       const lat = Number(cross.latitude);
-      console.log([lng, lat]);
+      //console.log([lng, lat]);
       const center = new Maptalks.Coordinate([lng, lat]);
       const marker = new Maptalks.Marker(center, {
         id: cross.crossing_id,
@@ -85,6 +118,9 @@
             textName: cross.crossing_name || '未知路口',
             textSize: 14,
             textDy: 24,
+            textHaloRadius : 5,
+            textHaloFill : cross.onSale ? '#FFB427' : '#B9B9B9'
+            //textFill : '#fff' // 
           },
         ],
       });
