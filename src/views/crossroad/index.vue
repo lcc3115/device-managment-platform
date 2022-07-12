@@ -207,7 +207,7 @@
       value: v,
     };
   });
-  const intersectionOpts = ['T型', '十字型', '双十字型（一沟两路）', '路段', '其他'].map(
+  const intersectionOpts = ['T型', '十字型', '双十字型一沟两路', '路段', '其他'].map(
     (v) => {
       return {
         label: v,
